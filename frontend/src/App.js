@@ -11,13 +11,14 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        setResponse(data);
       });
   };
 
   return (
     <div className="App">
       <p onClick={request}>click</p>
+      <p>{JSON.stringify(response)}</p>
     </div>
   );
 }
