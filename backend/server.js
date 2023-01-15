@@ -6,8 +6,11 @@ const port = 8000;
 
 var cors = require("cors");
 var request = require("request");
+var bp = require("body-parser");
 
 app.use(cors());
+app.use(bp.json());
+app.use(bp.urlencoded({ extended: true }));
 
 const apiKey = `Bearer ${process.env.YELP_KEY}`;
 
@@ -22,7 +25,6 @@ const businessSearch = (latitude, longitude, sdk) => {
       sort_by: "best_match",
       limit: apiLimit,
       radius: searchRadius,
-      price, // 1 2 3 4
     })
     .then(({ data }) => {
       return data;
@@ -30,7 +32,7 @@ const businessSearch = (latitude, longitude, sdk) => {
     .catch((err) => console.error(err));
 };
 
-// calls https://docs.developer.yelp.com/reference/v3_business_search, returns locations within 50km
+// calls https://docs.developer.yelp.com/reference/v3_business_search, returns locations within 40km
 const yelpGetLocations = (startCoordinates) => {
   // GET yelp endpoint using start coordinates
   const startLongitude = startCoordinates.longitude;
@@ -40,26 +42,14 @@ const yelpGetLocations = (startCoordinates) => {
   sdk.auth(apiKey);
 
   // update each location with category type
-  const foodLocations = businessSearch(startLatitude, startLongitude, sdk).map(
-    (location) => {
-      location.category = "food";
-    }
-  );
+  const foodLocations = businessSearch(startLatitude, startLongitude, sdk);
   const entertainmentLocations = businessSearch(
     startLatitude,
     startLongitude,
     sdk
-  ).map((location) => {
-    location.category = "entertainment";
-  });
+  );
 
-  const shoppingLocations = businessSearch(
-    startLatitude,
-    startLongitude,
-    sdk
-  ).map((location) => {
-    location.category = "shopping";
-  });
+  const shoppingLocations = businessSearch(startLatitude, startLongitude, sdk);
 
   return {
     food: foodLocations,
@@ -78,7 +68,7 @@ const orsGetDuration = (location, transportMethod) => {
       headers: {
         Accept:
           "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
-        Authorization: "",
+        Authorization: process.env.ORS_KEY,
         "Content-Type": "application/json; charset=utf-8",
       },
     },
@@ -89,8 +79,6 @@ const orsGetDuration = (location, transportMethod) => {
     }
   );
 };
-
-const activityTime = (constraints) => {};
 
 // locations is list of businesses
 const bestLocationsAlgorithm = (locations, constraints, timeLimit) => {
@@ -143,6 +131,21 @@ const bestLocationsAlgorithm = (locations, constraints, timeLimit) => {
   return bestLocations;
 };
 
+const getCoords = (address) => {
+  request(
+    {
+      method: "POST",
+      url: `https://api.geoapify.com/v1/geocode/search?text=${address}&apiKey=${process.env.ORS_KEY}`,
+      heade,
+    },
+    function (error, response, body) {
+      console.log("Status:", response.statusCode);
+      console.log("Headers:", JSON.stringify(response.headers));
+      console.log("Response:", body);
+    }
+  );
+};
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
@@ -166,11 +169,13 @@ app.get("/testORS", (req, res) => {
 });
 
 app.post("/algorithm", (req, res) => {
-  console.log("nice body", req.body);
+  console.log("body", req.body);
   const { constraints, planName } = req.body;
   const { categories, timeAlloc, timeLimit, travelLimit, startLocation } =
     constraints;
-  const yelpLocations = yelpGetLocations(startLocation);
+
+  const startCoords = getCoords(startLocation);
+  const yelpLocations = yelpGetLocations(startCoords);
   console.log(yelpLocations);
   debugger;
   // ensure timeLimit in seconds
