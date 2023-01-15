@@ -25,8 +25,8 @@ const Home = () => {
       entertainment: 0,
       shopping: 0,
     },
-    timeLimit: 0,
-    travelLimit: 0,
+    timeLimit: 3,
+    travelLimit: 10,
     startLocation,
   });
 
@@ -134,7 +134,9 @@ const Home = () => {
       <div className="categories pt-8">
         <h1>Hangout Categories</h1>
         <div className="food-wrapper pt-4">
-          <label htmlFor="food" className="pr-4 text-sm font-sm text-gray-700">Food visits:</label>
+          <label htmlFor="food" className="pr-4 text-sm font-sm text-gray-700">
+            Food visits:
+          </label>
           <input
             type="number"
             name="food"
@@ -144,7 +146,12 @@ const Home = () => {
               constraints.categories.food = e.target.value;
             }}
           ></input>
-          <label htmlFor="food-alloc" className="pl-8 pr-4 text-sm font-sm text-gray-700">Time allocated (minutes):</label>
+          <label
+            htmlFor="food-alloc"
+            className="pl-8 pr-4 text-sm font-sm text-gray-700"
+          >
+            Time allocated (minutes):
+          </label>
           <input
             type="number"
             name="food-alloc"
@@ -156,7 +163,12 @@ const Home = () => {
           ></input>
         </div>
         <div className="entertainment-wrapper pt-4">
-          <label htmlFor="entertainment" className="pr-4 text-sm font-sm text-gray-700">Entertainment visits:</label>
+          <label
+            htmlFor="entertainment"
+            className="pr-4 text-sm font-sm text-gray-700"
+          >
+            Entertainment visits:
+          </label>
           <input
             type="number"
             name="entertainment"
@@ -166,7 +178,12 @@ const Home = () => {
               constraints.categories.entertainment = e.target.value;
             }}
           ></input>
-          <label htmlFor="entertainment-alloc" className="pl-8 pr-4 text-sm font-sm text-gray-700">Time allocated (minutes):</label>
+          <label
+            htmlFor="entertainment-alloc"
+            className="pl-8 pr-4 text-sm font-sm text-gray-700"
+          >
+            Time allocated (minutes):
+          </label>
           <input
             type="number"
             name="entertainment-alloc"
@@ -178,7 +195,12 @@ const Home = () => {
           ></input>
         </div>
         <div className="shopping-wrapper pt-4">
-          <label htmlFor="shopping" className="pr-4 text-sm font-sm text-gray-700">Shopping visits:</label>
+          <label
+            htmlFor="shopping"
+            className="pr-4 text-sm font-sm text-gray-700"
+          >
+            Shopping visits:
+          </label>
           <input
             type="number"
             name="shopping"
@@ -188,7 +210,12 @@ const Home = () => {
               constraints.categories.shopping = e.target.value;
             }}
           ></input>
-          <label htmlFor="shopping-alloc" className="pl-8 pr-4 text-sm font-sm text-gray-700">Time allocated (minutes):</label>
+          <label
+            htmlFor="shopping-alloc"
+            className="pl-8 pr-4 text-sm font-sm text-gray-700"
+          >
+            Time allocated (minutes):
+          </label>
           <input
             type="number"
             name="shopping-alloc"

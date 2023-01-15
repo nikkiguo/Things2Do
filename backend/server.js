@@ -14,42 +14,51 @@ app.use(bp.urlencoded({ extended: true }));
 
 const apiKey = `Bearer ${process.env.YELP_KEY}`;
 
-const apiLimit = 5;
+const apiLimit = 2;
 const searchRadius = 9999; // 40km search radius (test 10km)
 
-const businessSearch = (latitude, longitude, sdk) => {
-  sdk
-    .v3_business_search({
-      latitude,
-      longitude,
-      sort_by: "best_match",
-      limit: apiLimit,
-      radius: searchRadius,
-    })
-    .then(({ data }) => {
-      return data;
-    })
-    .catch((err) => console.error(err));
+const businessSearch = async (latitude, longitude, term) => {
+  const sdk = require("api")("@yelp-developers/v1.0#2hsur2ylbank95o");
+  sdk.auth(apiKey);
+  const res = await sdk.v3_business_search({
+    latitude,
+    longitude,
+    sort_by: "best_match",
+    limit: apiLimit,
+    radius: searchRadius,
+    term,
+  });
+  try {
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 // calls https://docs.developer.yelp.com/reference/v3_business_search, returns locations within 40km
-const yelpGetLocations = (startCoordinates) => {
+const yelpGetLocations = async (startCoordinates) => {
+  console.log("start coords", startCoordinates);
   // GET yelp endpoint using start coordinates
   const startLongitude = startCoordinates.longitude;
   const startLatitude = startCoordinates.latitude;
 
-  const sdk = require("api")("@yelp-developers/v1.0#2hsur2ylbank95o");
-  sdk.auth(apiKey);
-
   // update each location with category type
-  const foodLocations = businessSearch(startLatitude, startLongitude, sdk);
-  const entertainmentLocations = businessSearch(
+  const foodLocations = await businessSearch(
     startLatitude,
     startLongitude,
-    sdk
+    "food"
+  );
+  const entertainmentLocations = await businessSearch(
+    startLatitude,
+    startLongitude,
+    "entertainment"
   );
 
-  const shoppingLocations = businessSearch(startLatitude, startLongitude, sdk);
+  const shoppingLocations = await businessSearch(
+    startLatitude,
+    startLongitude,
+    "shopping"
+  );
 
   return {
     food: foodLocations,
@@ -59,25 +68,41 @@ const yelpGetLocations = (startCoordinates) => {
 };
 
 const orsGetDuration = (location, transportMethod) => {
-  var request = require("request");
-  request(
-    {
-      method: "POST",
-      url: `https://api.openrouteservice.org/v2/matrix/${transportMethod}`,
-      body: location,
-      headers: {
-        Accept:
-          "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
-        Authorization: process.env.ORS_KEY,
-        "Content-Type": "application/json; charset=utf-8",
-      },
+  request({
+    method: "POST",
+    url: `https://api.openrouteservice.org/v2/matrix/${transportMethod}`,
+    body: location,
+    headers: {
+      Accept:
+        "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
+      Authorization: process.env.ORS_KEY,
+      "Content-Type": "application/json; charset=utf-8",
     },
-    function (error, response, body) {
-      console.log("Status:", response.statusCode);
-      console.log("Headers:", JSON.stringify(response.headers));
-      console.log("Response:", body);
-    }
-  );
+  });
+
+  return new Promise((resolve, reject) => {
+    request(
+      {
+        method: "POST",
+        url: `https://api.openrouteservice.org/v2/matrix/${transportMethod}`,
+        body: location,
+        headers: {
+          Accept:
+            "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
+          Authorization: process.env.ORS_KEY,
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      },
+      function (error, response, body) {
+        try {
+          // JSON.parse() can throw an exception if not valid JSON
+          resolve(JSON.parse(body));
+        } catch (e) {
+          reject(e);
+        }
+      }
+    );
+  });
 };
 
 // locations is list of businesses
@@ -132,18 +157,22 @@ const bestLocationsAlgorithm = (locations, constraints, timeLimit) => {
 };
 
 const getCoords = (address) => {
-  request(
-    {
-      method: "POST",
-      url: `https://api.geoapify.com/v1/geocode/search?text=${address}&apiKey=${process.env.ORS_KEY}`,
-      heade,
-    },
-    function (error, response, body) {
-      console.log("Status:", response.statusCode);
-      console.log("Headers:", JSON.stringify(response.headers));
-      console.log("Response:", body);
-    }
-  );
+  return new Promise((resolve, reject) => {
+    request(
+      {
+        method: "GET",
+        url: `https://api.geoapify.com/v1/geocode/search?text=${address}&apiKey=${process.env.GEOAPIFY_KEY}`,
+      },
+      function (error, response, body) {
+        try {
+          // JSON.parse() can throw an exception if not valid JSON
+          resolve(JSON.parse(body));
+        } catch (e) {
+          reject(e);
+        }
+      }
+    );
+  });
 };
 
 app.get("/", (req, res) => {
@@ -168,16 +197,21 @@ app.get("/testORS", (req, res) => {
   res.send("check console");
 });
 
-app.post("/algorithm", (req, res) => {
+app.post("/algorithm", async (req, res) => {
   console.log("body", req.body);
   const { constraints, planName } = req.body;
   const { categories, timeAlloc, timeLimit, travelLimit, startLocation } =
     constraints;
 
-  const startCoords = getCoords(startLocation);
-  const yelpLocations = yelpGetLocations(startCoords);
+  const startCoords = await getCoords(startLocation);
+
+  console.log("startcoords", startCoords);
+  const yelpLocations = await yelpGetLocations({
+    latitude: startCoords.features[0].properties.lat,
+    longitude: startCoords.features[0].properties.lon,
+  });
   console.log(yelpLocations);
-  debugger;
+  return;
   // ensure timeLimit in seconds
   const algoResult = bestLocationsAlgorithm(
     yelpLocations.businesses,
