@@ -67,25 +67,25 @@ const yelpGetLocations = async (startCoordinates) => {
   };
 };
 
-const orsGetDuration = (location, transportMethod) => {
-  request({
-    method: "POST",
-    url: `https://api.openrouteservice.org/v2/matrix/${transportMethod}`,
-    body: location,
-    headers: {
-      Accept:
-        "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
-      Authorization: process.env.ORS_KEY,
-      "Content-Type": "application/json; charset=utf-8",
-    },
-  });
+const orsGetDuration = async (location, transportMethod) => {
+  const { start, end } = location;
+  if (start === null) {
+    // first in path
+    return {
+      durations: [
+        [0, 0],
+        [0, 0],
+      ],
+    };
+  }
+  const startEnd = `[[${start.latitude}, ${start.longitude}], [${end.latitude}, ${end.longitude}]]`;
 
   return new Promise((resolve, reject) => {
-    request(
+    return request(
       {
         method: "POST",
         url: `https://api.openrouteservice.org/v2/matrix/${transportMethod}`,
-        body: location,
+        body: startEnd,
         headers: {
           Accept:
             "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
@@ -96,7 +96,7 @@ const orsGetDuration = (location, transportMethod) => {
       function (error, response, body) {
         try {
           // JSON.parse() can throw an exception if not valid JSON
-          resolve(JSON.parse(body));
+          resolve(body);
         } catch (e) {
           reject(e);
         }
@@ -106,11 +106,17 @@ const orsGetDuration = (location, transportMethod) => {
 };
 
 // locations is list of businesses
-const bestLocationsAlgorithm = (locations, constraints, timeLimit) => {
+const bestLocationsAlgorithm = async (locations, constraints, timeLimit) => {
   const timeLimitSeconds = timeLimit * 3600;
   const bestLocations = [];
-  let curTime = timeLimitSeconds - activityTime(constraints);
+  // timeAlloc is in MINUTES, MINUTES * 60 -> SECONDS
+  const usedTime =
+    Object.values(constraints.timeAlloc).reduce((a, b) => {
+      return a + b;
+    }, 0) * 60;
+  let curTime = timeLimitSeconds - usedTime;
   let prevLocation = null;
+  let curTravel = null;
 
   // sort in descending order of distance (reversed for easy pop!)
   const maxFoodLocations = Object.values(locations.food).sort(
@@ -130,26 +136,50 @@ const bestLocationsAlgorithm = (locations, constraints, timeLimit) => {
     entertainment: maxEntLocations,
     shopping: maxShoppingLocations,
   };
+  // console.log("categories", categories);
 
   // for each category, take; stop once done or exceeded
   for (category of Object.keys(categories)) {
-    while (constraints.category > 0) {
-      const minLoc = categories.category.pop();
-      if (!minLoc) {
-        // ran out in category, go to next category
+    while (constraints.categories[category] > 0) {
+      if (categories[category].length === 0) {
+        // ran out of physical locations in the category while there is still demand left, go to next
         break;
       }
-      const curTravel = travelTime(prevLocation, minLoc.coordinates);
-      if (curTime + curTravel > timeLimitSeconds * 1.2) {
+      const minLoc = categories[category].pop();
+      console.log("category count", constraints.categories);
+      curTravel = await orsGetDuration(
+        {
+          start:
+            prevLocation != null
+              ? {
+                  latitude: prevLocation.coordinates.latitude,
+                  longitude: prevLocation.coordinates.longitude,
+                }
+              : null,
+          end: {
+            latitude: minLoc.coordinates.latitude,
+            longitude: minLoc.coordinates.longitude,
+          },
+        },
+        constraints.transportMethod
+      );
+      console.log("curTravel", await curTravel);
+      const curTravelTime = Math.min(
+        curTravel.durations[0][1],
+        curTravel.durations[1][0]
+      );
+      if (curTime + curTravelTime > timeLimitSeconds * 1.2) {
         // over time limit
         return bestLocations;
       } else {
         // accumulate travel time, update previous location, add to best
-        bestLocations += minLoc;
-        curTime += curTravel;
+        bestLocations.push(minLoc);
+        console.log("curTravelTime", curTravelTime);
+        curTime += curTravelTime;
         prevLocation = minLoc;
+        console.log("curtime", curTime);
       }
-      constraints.category--;
+      constraints.categories[category]--;
     }
   }
 
@@ -198,23 +228,30 @@ app.get("/testORS", (req, res) => {
 });
 
 app.post("/algorithm", async (req, res) => {
-  console.log("body", req.body);
   const { constraints, planName } = req.body;
-  const { categories, timeAlloc, timeLimit, travelLimit, startLocation } =
-    constraints;
+  const {
+    categories,
+    timeAlloc,
+    timeLimit,
+    travelLimit,
+    startLocation,
+    transportMethod,
+  } = constraints;
 
   const startCoords = await getCoords(startLocation);
 
-  console.log("startcoords", startCoords);
   const yelpLocations = await yelpGetLocations({
     latitude: startCoords.features[0].properties.lat,
     longitude: startCoords.features[0].properties.lon,
   });
-  console.log(yelpLocations);
-  return;
+  console.log("running algorithm...");
   // ensure timeLimit in seconds
   const algoResult = bestLocationsAlgorithm(
-    yelpLocations.businesses,
+    {
+      food: yelpLocations.food.businesses,
+      entertainment: yelpLocations.entertainment.businesses,
+      shopping: yelpLocations.shopping.businesses,
+    },
     constraints,
     timeLimit
   );

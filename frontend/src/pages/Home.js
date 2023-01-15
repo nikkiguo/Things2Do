@@ -16,14 +16,14 @@ const Home = () => {
 
   const [constraints, setConstraints] = useState({
     categories: {
-      food: 0,
-      entertainment: 0,
-      shopping: 0,
+      food: 1,
+      entertainment: 1,
+      shopping: 1,
     },
     timeAlloc: {
-      food: 0,
-      entertainment: 0,
-      shopping: 0,
+      food: 60,
+      entertainment: 60,
+      shopping: 60,
     },
     timeLimit: 3,
     travelLimit: 10,
