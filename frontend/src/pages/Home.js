@@ -13,7 +13,6 @@ const Home = () => {
   const [planName, setPlanName] = useState("New Plan");
 
   const [locationSuggestions, setLocationSuggestions] = useState([]);
-
   const [constraints, setConstraints] = useState({
     categories: {
       food: 1,
@@ -28,6 +27,7 @@ const Home = () => {
     timeLimit: 3,
     travelLimit: 10,
     startLocation,
+    travelMethod: "foot-walking", // foot-walking, driving-car, cycling-road
   });
 
   const finalizeGroup = () => {
@@ -111,6 +111,21 @@ const Home = () => {
             className="block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             placeholder="3 hours"
           />
+        </div>
+      </div>
+      <div class="pt-8">
+        <label for="travelMethod" class="block text-sm font-sm text-gray-700">Choose a travel method:</label>
+        <div class="relative mt-1 rounded-md shadow-sm">
+          <select 
+            id="travelMethod" 
+            class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+            onChange={(e) => {
+              constraints.travelMethod = e.target.value;
+            }}>
+            <option selected value="foot-walking">Walk</option>
+            <option value="driving-car">Car</option>
+            <option value="cycling-road">Bike</option>
+          </select>
         </div>
       </div>
       <div className="pt-8">
@@ -236,79 +251,149 @@ const Home = () => {
             Create Event
           </span>
         </button>
-        <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-          <a href="#">
-            <img
-              className="rounded-t-lg"
-              src="https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              alt=""
-            />
-          </a>
-          <div className="p-5">
-            <a href="#">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                Pasta Place
-              </h5>
-            </a>
-            <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
-              🌟 4/5 stars based on 100 reviews
-            </p>
-            <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
-              ⏱️ 1.5 km from your location
-            </p>
-            <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
-              📌 1280 Main St W Building Room 102, Hamilton, ON
-            </p>
-            <a
-              href="#"
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Yelp reviews
-              <svg
-                aria-hidden="true"
-                className="w-4 h-4 ml-2 -mr-1"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
+        <h1 className="pt-8 pb-4 text-center text-xl">Voila! Here is your planned hangout 🎉</h1>
 
-      {/* hidden boilerplate html */}
-      <div className="pt-8 hidden">
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="username"
-          >
-            Time Limit (hours)
-          </label>
-          <br></br>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="username"
-            type="text"
-            placeholder="1"
-          />
+        <div className="results-container flex flex-row flex-nowrap justify-around items-center">
+          
+          <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+            <a href="#">
+              <img
+                className="rounded-t-lg"
+                src="https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                alt=""
+              />
+            </a>
+            <div className="p-5">
+              <a href="#">
+                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  Maccheroni Cucina Alfresco
+                </h5>
+              </a>
+              <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
+                🌟 4/5 stars based on 100 reviews
+              </p>
+              <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
+                ⏱️ 1.5 km from your location
+              </p>
+              <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
+                📌 1280 Main St W Building Room 102, Hamilton, ON
+              </p>
+              <a
+                href="#"
+                className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Yelp reviews
+                <svg
+                  aria-hidden="true"
+                  className="w-4 h-4 ml-2 -mr-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+            <a href="#">
+              <img
+                className="rounded-t-lg"
+                src="https://images.pexels.com/photos/2610756/pexels-photo-2610756.jpeg?auto=compress&cs=tinysrgb&w=800"
+                alt=""
+              />
+            </a>
+            <div className="p-5">
+              <a href="#">
+                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  CF Lime Ridge
+                </h5>
+              </a>
+              <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
+                🌟 4.3/5 stars based on 4.3k reviews
+              </p>
+              <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
+                ⏱️ 0.6 km from your location
+              </p>
+              <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
+                📌 999 Upper Wentworth St, Hamilton, ON L9A 4X5
+              </p>
+              <a
+                href="#"
+                className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Yelp reviews
+                <svg
+                  aria-hidden="true"
+                  className="w-4 h-4 ml-2 -mr-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+
+
+          <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+            <a href="#">
+              <img
+                className="rounded-t-lg"
+                src="https://images.pexels.com/photos/1725995/pexels-photo-1725995.jpeg?auto=compress&cs=tinysrgb&w=800"
+                alt=""
+              />
+            </a>
+            <div className="p-5">
+              <a href="#">
+                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  Coronation Arena
+                </h5>
+              </a>
+              <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
+                🌟 4.2/5 stars based on 100 reviews
+              </p>
+              <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
+                ⏱️ 1.5 km from your location
+              </p>
+              <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
+                📌 81 Macklin St N, Hamilton, ON L8S 3S1
+              </p>
+              <a
+                href="#"
+                className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Yelp reviews
+                <svg
+                  aria-hidden="true"
+                  className="w-4 h-4 ml-2 -mr-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          
         </div>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Create Group
-        </button>
-        <br />
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={finalizeGroup}
-        >
-          Finalize Group
-        </button>
       </div>
     </div>
   );
