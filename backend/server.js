@@ -2,7 +2,7 @@ require("secrets");
 
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 8000;
 
 var cors = require("cors");
 var request = require("request");
@@ -166,8 +166,10 @@ app.get("/testORS", (req, res) => {
 });
 
 app.post("/algorithm", (req, res) => {
+  console.log("nice body", req.body);
+  const { constraints, planName } = req.body;
   const { categories, timeAlloc, timeLimit, travelLimit, startLocation } =
-    req.body;
+    constraints;
   const yelpLocations = yelpGetLocations(startLocation);
   console.log(yelpLocations);
   debugger;

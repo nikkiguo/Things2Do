@@ -10,6 +10,8 @@ const Home = () => {
     "1280 Main St W Building Room 102, Hamilton, ON L8S 4L8"
   );
 
+  const [planName, setPlanName] = useState("New Plan");
+
   const [locationSuggestions, setLocationSuggestions] = useState([]);
 
   const [constraints, setConstraints] = useState({
@@ -29,16 +31,16 @@ const Home = () => {
   });
 
   const finalizeGroup = () => {
-    console.log("constraints", constraints);
     // send coordinates, constraints, time limit to backend
-    fetch("http://127.0.0.1:3000/", {
+    fetch("http://127.0.0.1:8000/algorithm", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: constraints,
+      body: JSON.stringify({ constraints, name: planName }),
     })
       .then((response) => {
         // format to return in next then
@@ -68,6 +70,9 @@ const Home = () => {
             id="hangout-name"
             className="block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             placeholder="My Hamilton Extravaganza"
+            onChange={(e) => {
+              setPlanName(e.target.value);
+            }}
           />
         </div>
       </div>
