@@ -5,6 +5,7 @@ const app = express();
 const port = 3000;
 
 var cors = require("cors");
+var request = require("request");
 
 app.use(cors());
 
@@ -65,6 +66,23 @@ const yelpGetLocations = (startCoordinates) => {
     entertainment: entertainmentLocations,
     shopping: shoppingLocations,
   };
+};
+
+const orsGetDuration = (location, transportMethod) => {
+  var request = require('request');
+  request({
+    method: 'POST',
+    url: `https://api.openrouteservice.org/v2/matrix/${transportMethod}`,
+    body: location,
+    headers: {
+      'Accept': 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8',
+      'Authorization': '',
+      'Content-Type': 'application/json; charset=utf-8'
+    }}, function (error, response, body) {
+    console.log('Status:', response.statusCode);
+    console.log('Headers:', JSON.stringify(response.headers));
+    console.log('Response:', body);
+  });
 };
 
 const activityTime = (constraints) => {};
@@ -130,6 +148,15 @@ app.get("/test", (req, res) => {
     longitude: -80.538872,
   });
   console.log(businesses);
+  res.send("check console");
+});
+
+app.get("/testORS", (req, res) => {
+  const durations = orsGetDuration(
+    '{"locations":[[9.70093,48.477473],[9.207916,49.153868],[37.573242,55.801281]]}',
+    "driving-car"
+  );
+  console.log(durations);
   res.send("check console");
 });
 
