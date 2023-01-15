@@ -90,9 +90,9 @@ const bestLocationsAlgorithm = (locations, constraints, timeLimit) => {
   );
 
   const categories = {
-    food: minFoodLocations,
-    entertainment: minEntLocations,
-    shopping: minShoppingLocations,
+    food: maxFoodLocations,
+    entertainment: maxEntLocations,
+    shopping: maxShoppingLocations,
   };
 
   // for each category, take; stop once done or exceeded
