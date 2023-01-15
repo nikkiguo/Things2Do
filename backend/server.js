@@ -35,6 +35,38 @@ const businessSearch = async (latitude, longitude, term) => {
   }
 };
 
+const createNFT = async () => {
+  const sdk = require('api')('@verbwire/v1.0#1cmb42lcujqu5q');
+  sdk.auth(key);
+  sdk.postNftMintQuickmintfrommetadataurl({
+    allowPlatformToOperateToken: 'true',
+    chain: 'goerli',
+    metadataUrl: 'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+  }, {accept: 'application/json'})
+    .then(({ data }) => console.log(data))
+    .catch(err => console.error(err));
+};
+
+const getNFTWallet = async () => {
+  const sdk = require('api')('@verbwire/v1.0#1cmb42lcujqu5q');
+  sdk.auth(key);
+  sdk.getNftDataTransactions({walletAddress: address, chain: 'goerli'})
+    .then(({ data }) => console.log(data))
+    .catch(err => console.error(err));
+};
+
+const showNFT = async () => {
+  const sdk = require('api')('@verbwire/v1.0#1cmb42lcujqu5q');
+  sdk.auth(key);
+  sdk.getNftDataNftdetails({
+    contractAddress: contractAddress,
+    tokenId: id,
+    chain: 'goerli'
+  })
+    .then(({ data }) => console.log(data))
+    .catch(err => console.error(err));
+};
+
 // calls https://docs.developer.yelp.com/reference/v3_business_search, returns locations within 40km
 const yelpGetLocations = async (startCoordinates) => {
   console.log("start coords", startCoordinates);
@@ -248,6 +280,32 @@ app.get("/testORS", (req, res) => {
   console.log(durations);
   res.send("check console");
 });
+
+app.get("/testCreateNFT", (req, res) => {
+  const mintedNFT = createNFT(
+    "https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+  );
+  console.log(mintedNFT);
+  res.send("check console");
+});
+
+app.get("/testGetNFTWallet", (req, res) => {
+  const retrievedNFT = getNFTWallet(secret_token);
+  console.log(retrievedNFT);
+  res.send("check console");
+});
+
+app.get("/testShowNFT" , (req, res) => {
+  const nft = showNFT();
+  console.log(nft);
+  url = JSON.parse(nft);
+  url = nft["nft_details"]["tokenURI"];
+  nftData = getJSON(url)
+  console.log(nftData);
+  res.send("check console");
+}); 
+
+
 
 app.post("/algorithm", async (req, res) => {
   const { constraints, planName } = req.body;

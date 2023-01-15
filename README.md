@@ -4,4 +4,6 @@ Minimize time spent planning and maximize having fun with Things2Do!
 
 ![image](https://user-images.githubusercontent.com/46271636/212544261-2ec3318d-44dd-4ccf-b1c6-74583a6d6b2c.png)
 
+![image](https://user-images.githubusercontent.com/46271636/212552274-7370af77-121c-4c53-8e4a-a519dd698df3.png)
+
 
