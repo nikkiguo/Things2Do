@@ -109,7 +109,7 @@ const Home = () => {
             name="time-limit"
             id="time-limit"
             className="block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            placeholder="0 hours"
+            placeholder="3 hours"
           />
         </div>
       </div>
@@ -127,7 +127,7 @@ const Home = () => {
             name="travel-limit"
             id="travel-limit"
             className="block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            placeholder="0 km"
+            placeholder="10 km"
           />
         </div>
       </div>
