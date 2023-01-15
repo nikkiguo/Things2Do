@@ -113,16 +113,24 @@ const Home = () => {
           />
         </div>
       </div>
-      <div class="pt-8">
-        <label for="travelMethod" class="block text-sm font-sm text-gray-700">Choose a travel method:</label>
-        <div class="relative mt-1 rounded-md shadow-sm">
-          <select 
-            id="travelMethod" 
-            class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+      <div className="pt-8">
+        <label
+          htmlFor="travelMethod"
+          className="block text-sm font-sm text-gray-700"
+        >
+          Choose a travel method:
+        </label>
+        <div className="relative mt-1 rounded-md shadow-sm">
+          <select
+            id="travelMethod"
+            className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             onChange={(e) => {
               constraints.travelMethod = e.target.value;
-            }}>
-            <option selected value="foot-walking">Walk</option>
+            }}
+          >
+            <option selected value="foot-walking">
+              Walk
+            </option>
             <option value="driving-car">Car</option>
             <option value="cycling-road">Bike</option>
           </select>
@@ -251,10 +259,11 @@ const Home = () => {
             Create Event
           </span>
         </button>
-        <h1 className="pt-8 pb-4 text-center text-xl">Voila! Here is your planned hangout 🎉</h1>
+        <h1 className="pt-8 pb-4 text-center text-xl">
+          Voila! Here is your planned hangout 🎉
+        </h1>
 
         <div className="results-container flex flex-row flex-nowrap justify-around items-center">
-          
           <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
             <a href="#">
               <img
@@ -345,8 +354,6 @@ const Home = () => {
             </div>
           </div>
 
-
-
           <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
             <a href="#">
               <img
@@ -391,8 +398,6 @@ const Home = () => {
               </a>
             </div>
           </div>
-
-          
         </div>
       </div>
     </div>

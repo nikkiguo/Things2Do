@@ -67,7 +67,7 @@ const yelpGetLocations = async (startCoordinates) => {
   };
 };
 
-const orsGetDuration = async (location, transportMethod) => {
+const orsGetDuration = async (location, travelMethod) => {
   const { start, end } = location;
   if (start === null) {
     // first in path
@@ -78,13 +78,16 @@ const orsGetDuration = async (location, transportMethod) => {
       ],
     };
   }
-  const startEnd = `[[${start.latitude}, ${start.longitude}], [${end.latitude}, ${end.longitude}]]`;
+
+  const startEnd = `{"locations": [[${start.latitude}, ${start.longitude}], [${end.latitude}, ${end.longitude}]]}`;
+
+  console.log("startend", startEnd);
 
   return new Promise((resolve, reject) => {
-    return request(
+    request(
       {
         method: "POST",
-        url: `https://api.openrouteservice.org/v2/matrix/${transportMethod}`,
+        url: `https://api.openrouteservice.org/v2/matrix/${travelMethod}`,
         body: startEnd,
         headers: {
           Accept:
@@ -161,13 +164,33 @@ const bestLocationsAlgorithm = async (locations, constraints, timeLimit) => {
             longitude: minLoc.coordinates.longitude,
           },
         },
-        constraints.transportMethod
+        constraints.travelMethod
       );
-      console.log("curTravel", await curTravel);
-      const curTravelTime = Math.min(
-        curTravel.durations[0][1],
-        curTravel.durations[1][0]
-      );
+      // const curTravelTime = Math.min(
+      //   curTravel.durations[0][1],
+      //   curTravel.durations[1][0]
+      // );
+      // open routing service API is not working
+      // divide by mod instead
+      const walkingMod = 1.4;
+      const bikeMod = 7;
+      const carMod = 18;
+
+      let curTravelTime = 0;
+
+      switch (constraints.travelMethod) {
+        case "foot-walking":
+          curTravelTime = minLoc.distance / walkingMod;
+          break;
+        case "cycling-road":
+          curTravelTime = minLoc.distance / bikeMod;
+          break;
+        case "driving-car":
+          curTravelTime = minLoc.distance / carMod;
+          break;
+        default:
+          console.error("undefined travel method");
+      }
       if (curTime + curTravelTime > timeLimitSeconds * 1.2) {
         // over time limit
         return bestLocations;
@@ -177,7 +200,6 @@ const bestLocationsAlgorithm = async (locations, constraints, timeLimit) => {
         console.log("curTravelTime", curTravelTime);
         curTime += curTravelTime;
         prevLocation = minLoc;
-        console.log("curtime", curTime);
       }
       constraints.categories[category]--;
     }
@@ -235,7 +257,7 @@ app.post("/algorithm", async (req, res) => {
     timeLimit,
     travelLimit,
     startLocation,
-    transportMethod,
+    travelMethod,
   } = constraints;
 
   const startCoords = await getCoords(startLocation);
