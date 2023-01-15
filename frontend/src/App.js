@@ -28,6 +28,8 @@ export default App;
 ## choose location (coordinates?)
 map choose -> coordinates -> backend
 
+## name of hangout
+
 ## time limit
 
 ## create group and link
