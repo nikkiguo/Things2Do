@@ -10,22 +10,14 @@ app.use(cors());
 
 const apiKey = `Bearer ${process.env.YELP_KEY}`;
 
-const apiLimit = 2;
+const apiLimit = 5;
 const searchRadius = 9999; // 40km search radius (test 10km)
 
-// calls https://docs.developer.yelp.com/reference/v3_business_search, returns locations within 50km
-const yelpGetBusiness = (startCoordinates, categories, price) => {
-  // GET yelp endpoint using start coordinates
-  const startLongitude = startCoordinates.longitude;
-  const startLatitude = startCoordinates.latitude;
-
-  const sdk = require("api")("@yelp-developers/v1.0#2hsur2ylbank95o");
-  sdk.auth(apiKey);
-
+const businessSearch = (latitude, longitude, sdk) => {
   sdk
     .v3_business_search({
-      latitude: startLatitude,
-      longitude: startLongitude,
+      latitude,
+      longitude,
       sort_by: "best_match",
       limit: apiLimit,
       radius: searchRadius,
@@ -33,26 +25,60 @@ const yelpGetBusiness = (startCoordinates, categories, price) => {
       price, // 1 2 3 4
     })
     .then(({ data }) => {
-      console.log(data);
       return data;
     })
     .catch((err) => console.error(err));
 };
 
-const bestLocationsAlgorithm = (locations) => {
-  // sort by category, keep category metrics (# found in radius)
-  const sdk = require("api")("@yelp-developers/v1.0#4in14vlckiw7rd");
+// calls https://docs.developer.yelp.com/reference/v3_business_search, returns locations within 50km
+const yelpGetLocations = (startCoordinates) => {
+  // GET yelp endpoint using start coordinates
+  const startLongitude = startCoordinates.longitude;
+  const startLatitude = startCoordinates.latitude;
+
+  const sdk = require("api")("@yelp-developers/v1.0#2hsur2ylbank95o");
   sdk.auth(apiKey);
-  sdk
-    .v3_business_reviews({
-      limit: apiLimit,
-      sort_by: "yelp_sort",
-      latitude: "",
-      longitude: "",
-      business_id_or_alias: "H4jJ7XB3CetIr1pg56CczQ",
-    })
-    .then(({ data }) => console.log(data))
-    .catch((err) => console.error(err));
+
+  const foodLocations = businessSearch(startLatitude, startLongitude, sdk);
+  const entertainmentLocations = businessSearch(
+    startLatitude,
+    startLongitude,
+    sdk
+  );
+  const shoppingLocations = businessSearch(startLatitude, startLongitude, sdk);
+
+  return {
+    food: foodLocations,
+    entertainment: entertainmentLocations,
+    shopping: shoppingLocations,
+  };
+};
+
+const activityTime = (constraints) => {};
+
+// locations is list of businesses
+const bestLocationsAlgorithm = (locations, constraints, timeLimit) => {
+  const timeLimitSeconds = timeLimit * 3600;
+  const bestLocations = [];
+  let curTime = timeLimitSeconds - activityTime(constraints);
+  let prevLocation = null;
+  const minDistLocations = Object.keys(locations).sort(
+    (a, b) => a.distance - b.distance
+  );
+  // take smallest distance each time until timeLimitSeconds exceeded
+  for (minLoc of minDistLocations) {
+    const curTravel = travelTime(prevLocation, minLoc.coordinates);
+    if (curTime + curTravel > timeLimitSeconds * 1.2) {
+      // over time limit
+      break;
+    } else {
+      // accumulate travel time, update previous location, add to best
+      bestLocations += minLoc;
+      curTime += curTravel;
+      prevLocation = minLoc;
+    }
+  }
+  return bestLocations;
 };
 
 app.get("/", (req, res) => {
@@ -60,11 +86,24 @@ app.get("/", (req, res) => {
 });
 
 app.get("/test", (req, res) => {
-  const businesses = yelpGetBusiness({
+  const businesses = yelpGetLocations({
     latitude: 43.47237,
     longitude: -80.538872,
   });
-  res.send(businesses);
+  console.log(businesses);
+  res.send("check console");
+});
+
+app.post("/algorithm", (req, res) => {
+  const { coordinates, constraints, timeLimit } = req.body;
+  const yelpLocations = yelpGetLocations(coordinates);
+  // ensure timeLimit in seconds
+  const algoResult = bestLocationsAlgorithm(
+    yelpLocations.businesses,
+    constraints,
+    timeLimit
+  );
+  res.send(algoResult);
 });
 
 app.listen(port, () => {
