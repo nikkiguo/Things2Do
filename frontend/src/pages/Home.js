@@ -256,7 +256,7 @@ const Home = () => {
         <div className="results-container flex flex-row flex-nowrap justify-around items-center">
           
           <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-            <a href="#">
+            <a href="https://www.yelp.ca/biz/maccheroni-cucina-alfresco-hamilton">
               <img
                 className="rounded-t-lg"
                 src="https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
@@ -264,13 +264,13 @@ const Home = () => {
               />
             </a>
             <div className="p-5">
-              <a href="#">
+              <a href="https://www.yelp.ca/biz/maccheroni-cucina-alfresco-hamilton">
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                   Maccheroni Cucina Alfresco
                 </h5>
               </a>
               <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
-                🌟 4/5 stars based on 100 reviews
+                🌟 4/5 stars based on 11 reviews
               </p>
               <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
                 ⏱️ 1.5 km from your location
@@ -279,7 +279,7 @@ const Home = () => {
                 📌 1280 Main St W Building Room 102, Hamilton, ON
               </p>
               <a
-                href="#"
+                href="https://www.yelp.ca/biz/maccheroni-cucina-alfresco-hamilton"
                 className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 Yelp reviews
@@ -301,30 +301,30 @@ const Home = () => {
           </div>
 
           <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-            <a href="#">
+            <a href="https://www.yelp.ca/biz/cf-lime-ridge-hamilton?osq=CF+Lime+Ridge">
               <img
                 className="rounded-t-lg"
-                src="https://images.pexels.com/photos/2610756/pexels-photo-2610756.jpeg?auto=compress&cs=tinysrgb&w=800"
+                src="https://images.pexels.com/photos/3611545/pexels-photo-3611545.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                 alt=""
               />
             </a>
             <div className="p-5">
-              <a href="#">
+              <a href="https://www.yelp.ca/biz/cf-lime-ridge-hamilton?osq=CF+Lime+Ridge">
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                   CF Lime Ridge
                 </h5>
               </a>
               <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
-                🌟 4.3/5 stars based on 4.3k reviews
+                🌟 3.5/5 stars based on 4.3k reviews
               </p>
               <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
-                ⏱️ 0.6 km from your location
+                ⏱️ 13 km from your location
               </p>
               <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
                 📌 999 Upper Wentworth St, Hamilton, ON L9A 4X5
               </p>
               <a
-                href="#"
+                href="https://www.yelp.ca/biz/cf-lime-ridge-hamilton?osq=CF+Lime+Ridge"
                 className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 Yelp reviews
@@ -348,21 +348,17 @@ const Home = () => {
 
 
           <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-            <a href="#">
               <img
                 className="rounded-t-lg"
                 src="https://images.pexels.com/photos/1725995/pexels-photo-1725995.jpeg?auto=compress&cs=tinysrgb&w=800"
                 alt=""
               />
-            </a>
             <div className="p-5">
-              <a href="#">
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                  Coronation Arena
-                </h5>
-              </a>
+              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                Coronation Arena
+              </h5>
               <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
-                🌟 4.2/5 stars based on 100 reviews
+                🌟 4.0/5 stars based on 104 reviews
               </p>
               <p className="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
                 ⏱️ 1.5 km from your location
@@ -371,7 +367,6 @@ const Home = () => {
                 📌 81 Macklin St N, Hamilton, ON L8S 3S1
               </p>
               <a
-                href="#"
                 className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 Yelp reviews
@@ -391,8 +386,30 @@ const Home = () => {
               </a>
             </div>
           </div>
-
-          
+        </div>
+        <h1 className="pt-16 pb-4 text-center text-xl">Share your fun with custom NFTs 🙈</h1>
+        <div className="results-container flex flex-row flex-nowrap justify-around items-center">
+          <div className="pr-5">
+            <img
+              className="rounded-lg"
+              src="https://images.pexels.com/photos/12775025/pexels-photo-12775025.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt=""
+            />
+          </div>
+          <div className="pr-5">
+            <img
+              className="rounded-lg"
+              src="https://images.pexels.com/photos/47227/pexels-photo-47227.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt=""
+            />
+          </div>
+          <div>
+            <img
+              className="rounded-lg"
+              src="https://images.pexels.com/photos/7002772/pexels-photo-7002772.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt=""
+            />
+          </div>
         </div>
       </div>
     </div>
