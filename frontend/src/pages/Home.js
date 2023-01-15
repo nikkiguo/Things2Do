@@ -84,7 +84,7 @@ const Home = () => {
           Choose a start location:
         </label>
         <div className="relative mt-1 rounded-md shadow-sm">
-          <GeoapifyContext apiKey="65e6c894e9d046ceb2959fd30c2a1ddc">
+          <GeoapifyContext apiKey="">
             <GeoapifyGeocoderAutocomplete
               style="round-borders"
               placeholder="1280 Main St W Building Room 102, Hamilton, ON L8S 4L8"
@@ -131,57 +131,69 @@ const Home = () => {
           />
         </div>
       </div>
-      <div className="categories">
-        <h2>Categories</h2>
-        <div className="food-wrapper">
-          <label htmlFor="food">Food Visits:</label>
+      <div className="categories pt-8">
+        <h1>Hangout Categories</h1>
+        <div className="food-wrapper pt-4">
+          <label htmlFor="food" className="pr-4 text-sm font-sm text-gray-700">Food visits:</label>
           <input
             type="number"
             name="food"
+            placeholder="1 visit"
+            className="rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             onChange={(e) => {
               constraints.categories.food = e.target.value;
             }}
           ></input>
-          <label htmlFor="food-alloc">Time Allocated (minutes)</label>
+          <label htmlFor="food-alloc" className="pl-8 pr-4 text-sm font-sm text-gray-700">Time allocated (minutes):</label>
           <input
             type="number"
             name="food-alloc"
+            placeholder="60 minutes"
+            className="rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             onChange={(e) => {
               constraints.timeAlloc.food = e.target.value;
             }}
           ></input>
         </div>
-        <div className="entertainment-wrapper">
-          <label htmlFor="entertainment">Entertainment Visits:</label>
+        <div className="entertainment-wrapper pt-4">
+          <label htmlFor="entertainment" className="pr-4 text-sm font-sm text-gray-700">Entertainment visits:</label>
           <input
             type="number"
             name="entertainment"
+            placeholder="1 visit"
+            className="rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             onChange={(e) => {
               constraints.categories.entertainment = e.target.value;
             }}
           ></input>
-          <label htmlFor="entertainment-alloc">Time Allocated (minutes)</label>
+          <label htmlFor="entertainment-alloc" className="pl-8 pr-4 text-sm font-sm text-gray-700">Time allocated (minutes):</label>
           <input
             type="number"
             name="entertainment-alloc"
+            placeholder="60 minutes"
+            className="rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             onChange={(e) => {
               constraints.timeAlloc.entertainment = e.target.value;
             }}
           ></input>
         </div>
-        <div className="shopping-wrapper">
-          <label htmlFor="shopping">Shopping Visits:</label>
+        <div className="shopping-wrapper pt-4">
+          <label htmlFor="shopping" className="pr-4 text-sm font-sm text-gray-700">Shopping visits:</label>
           <input
             type="number"
             name="shopping"
+            placeholder="1 visit"
+            className="rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             onChange={(e) => {
               constraints.categories.shopping = e.target.value;
             }}
           ></input>
-          <label htmlFor="shopping-alloc">Time Allocated (minutes)</label>
+          <label htmlFor="shopping-alloc" className="pl-8 pr-4 text-sm font-sm text-gray-700">Time allocated (minutes):</label>
           <input
             type="number"
             name="shopping-alloc"
+            placeholder="60 minutes"
+            className="rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             onChange={(e) => {
               constraints.timeAlloc.shopping = e.target.value;
             }}
