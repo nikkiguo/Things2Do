@@ -1,3 +1,5 @@
+require("secrets");
+
 const express = require("express");
 const app = express();
 const port = 3000;
@@ -6,9 +8,9 @@ var cors = require("cors");
 
 app.use(cors());
 
-const apiKey = "Bearer {API_KEY}";
+const apiKey = `Bearer ${process.env.YELP_KEY}`;
 
-const apiLimit = 5;
+const apiLimit = 2;
 const searchRadius = 9999; // 40km search radius (test 10km)
 
 // calls https://docs.developer.yelp.com/reference/v3_business_search, returns locations within 50km
