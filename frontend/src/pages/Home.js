@@ -6,10 +6,9 @@ import {
 import "@geoapify/geocoder-autocomplete/styles/minimal.css";
 
 const Home = () => {
-  const [startLocation, setStartLocation] = useState({
-    name: "Campus Services Bldg, 1280 Main St W Building Room 102, Hamilton, ON L8S 4L8",
-    coordinates: [43.26225, -79.92025],
-  });
+  const [startLocation, setStartLocation] = useState(
+    "1280 Main St W Building Room 102, Hamilton, ON L8S 4L8"
+  );
 
   const [locationSuggestions, setLocationSuggestions] = useState([]);
 
@@ -238,9 +237,9 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      {/* hidden boilerplate html */}
       <div className="pt-8 hidden">
-        <h1>Location: {location.name}</h1>
-        <h2>Coordinates: {location.coordinates.join(", ")}</h2>
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"

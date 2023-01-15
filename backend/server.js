@@ -69,20 +69,25 @@ const yelpGetLocations = (startCoordinates) => {
 };
 
 const orsGetDuration = (location, transportMethod) => {
-  var request = require('request');
-  request({
-    method: 'POST',
-    url: `https://api.openrouteservice.org/v2/matrix/${transportMethod}`,
-    body: location,
-    headers: {
-      'Accept': 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8',
-      'Authorization': '',
-      'Content-Type': 'application/json; charset=utf-8'
-    }}, function (error, response, body) {
-    console.log('Status:', response.statusCode);
-    console.log('Headers:', JSON.stringify(response.headers));
-    console.log('Response:', body);
-  });
+  var request = require("request");
+  request(
+    {
+      method: "POST",
+      url: `https://api.openrouteservice.org/v2/matrix/${transportMethod}`,
+      body: location,
+      headers: {
+        Accept:
+          "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
+        Authorization: "",
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    },
+    function (error, response, body) {
+      console.log("Status:", response.statusCode);
+      console.log("Headers:", JSON.stringify(response.headers));
+      console.log("Response:", body);
+    }
+  );
 };
 
 const activityTime = (constraints) => {};
@@ -161,8 +166,9 @@ app.get("/testORS", (req, res) => {
 });
 
 app.post("/algorithm", (req, res) => {
-  const { coordinates, constraints, timeLimit } = req.body;
-  const yelpLocations = yelpGetLocations(coordinates);
+  const { categories, timeAlloc, timeLimit, travelLimit, startLocation } =
+    req.body;
+  const yelpLocations = yelpGetLocations(startLocation);
   console.log(yelpLocations);
   debugger;
   // ensure timeLimit in seconds
