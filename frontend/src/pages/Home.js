@@ -36,7 +36,7 @@ const Home = () => {
       <div class="pt-8">
         <label for="autocomplete-address-container" class="block text-sm font-sm text-gray-700">Choose a start location:</label>
         <div class="relative mt-1 rounded-md shadow-sm">
-          <GeoapifyContext apiKey="65e6c894e9d046ceb2959fd30c2a1ddc">
+          <GeoapifyContext apiKey="">
             <GeoapifyGeocoderAutocomplete
               style="round-borders" 
               placeholder="1280 Main St W Building Room 102, Hamilton, ON L8S 4L8"
@@ -52,9 +52,19 @@ const Home = () => {
         </div>
       </div>
       <div class="pt-8">
+        <label for="travel-method" class="block text-sm font-sm text-gray-700">Choose a travel method:</label>
+        <div class="relative mt-1 rounded-md shadow-sm">
+          <select id="travel-method" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option selected value="foot-walking">Walk</option>
+            <option value="driving-car">Car</option>
+            <option value="cycling-road">Bike</option>
+          </select>
+        </div>
+      </div>
+      <div class="pt-8">
         <label for="travel-limit" class="block text-sm font-sm text-gray-700">How far are you willing to travel (km)?</label>
         <div class="relative mt-1 rounded-md shadow-sm">
-          <input type="number" min="0" name="travel-limit" id="travel-limit" class="block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="0 km"/>
+          <input type="number" min="0" max="40" name="travel-limit" id="travel-limit" class="block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="0 km"/>
         </div>
       </div>
       <div class="pt-8">
@@ -70,7 +80,7 @@ const Home = () => {
             </a>
             <div class="p-5">
                 <a href="#">
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Pasta Place</h5>
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Lazeez Extravaganza</h5>
                 </a>
                 <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">🌟 4/5 stars based on 100 reviews</p>
                 <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">⏱️ 1.5 km from your location</p>
