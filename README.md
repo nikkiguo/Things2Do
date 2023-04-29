@@ -1,5 +1,7 @@
 # Things2Do
-Minimize time spent planning and maximize having fun with Things2Do!
+Minimize time spent planning and maximize having fun with Things2Do! 
+
+Winner of Most Creative Use of Verbwire API at [DeltaHacks IX](https://devpost.com/software/things2do) 
 
 ## Inspiration
 The idea for Things2Do came from the difficulties that we experienced when planning events with friends. Planning events often involve venue selection which can be a time-consuming, tedious process. Our search for solutions online yielded websites like Google Maps, Yelp, and TripAdvisor, but each fell short of our needs and often had complicated filters or cluttered interfaces. More importantly, we were unable to find event planning that accounts for the total duration of an outing event and much less when it came to scheduling multiple visits to venues accounting for travel time. This inspired us to create Things2Do which minimizes time spent planning and maximizes time spent at meaningful locations for a variety of preferences on a tight schedule. Now, there's always something to do with Things2Do!
